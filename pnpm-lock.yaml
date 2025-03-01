@@ -43,13 +43,13 @@ importers:
         specifier: 1.11.5
         version: 1.11.5
       '@types/express':
-        specifier: ^5.0.0
+        specifier: 5.0.0
         version: 5.0.0
       '@types/node':
-        specifier: ^22.13.7
+        specifier: 22.13.7
         version: 22.13.7
       '@types/supertest':
-        specifier: ^6.0.2
+        specifier: 6.0.2
         version: 6.0.2
       '@vitest/coverage-v8':
         specifier: 3.0.7
@@ -61,13 +61,13 @@ importers:
         specifier: ^7.0.0
         version: 7.0.0
       ts-loader:
-        specifier: ^9.5.2
+        specifier: 9.5.2
         version: 9.5.2(typescript@5.8.2)(webpack@5.98.0(@swc/core@1.11.5))
       ts-node:
-        specifier: ^10.9.2
+        specifier: 10.9.2
         version: 10.9.2(@swc/core@1.11.5)(@types/node@22.13.7)(typescript@5.8.2)
       typescript:
-        specifier: ^5.8.2
+        specifier: 5.8.2
         version: 5.8.2
       unplugin-swc:
         specifier: 1.5.1
