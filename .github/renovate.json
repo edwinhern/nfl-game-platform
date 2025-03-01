@@ -14,18 +14,11 @@
 		"helpers:pinGitHubActionDigests"
 	],
 	"timezone": "America/Chicago",
-	"labels": [
-		"dependencies"
-	],
+	"labels": ["dependencies"],
 	"dependencyDashboard": true,
 	"packageRules": [
 		{
-			"matchUpdateTypes": [
-				"minor",
-				"patch",
-				"pin",
-				"digest"
-			],
+			"matchUpdateTypes": ["minor", "patch", "pin", "digest"],
 			"groupName": "all non-major dependencies",
 			"groupSlug": "all-minor-patch",
 			"automerge": true
@@ -34,9 +27,7 @@
 			"groupName": "NestJS packages",
 			"groupSlug": "nestjs",
 			"automerge": true,
-			"matchPackageNames": [
-				"/^@nestjs//"
-			]
+			"matchPackageNames": ["/^@nestjs//"]
 		},
 		{
 			"matchPackageNames": [
@@ -50,29 +41,19 @@
 			"automerge": true
 		},
 		{
-			"matchPackageNames": [
-				"typescript",
-				"/^@types//",
-				"/^ts-/"
-			],
+			"matchPackageNames": ["typescript", "/^@types//", "/^ts-/"],
 			"groupName": "TypeScript and type definitions",
 			"groupSlug": "typescript",
 			"automerge": true
 		},
 		{
-			"matchPackageNames": [
-				"unplugin-swc",
-				"/^@swc//"
-			],
+			"matchPackageNames": ["unplugin-swc", "/^@swc//"],
 			"groupName": "SWC packages",
 			"groupSlug": "swc",
 			"automerge": true
 		},
 		{
-			"matchPackageNames": [
-				"rxjs",
-				"reflect-metadata"
-			],
+			"matchPackageNames": ["rxjs", "reflect-metadata"],
 			"groupName": "Core runtime dependencies",
 			"groupSlug": "core-runtime",
 			"automerge": true
