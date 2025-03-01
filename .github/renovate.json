@@ -24,10 +24,10 @@
 			"automerge": true
 		},
 		{
-			"matchPackagePatterns": ["^@nestjs/"],
 			"groupName": "NestJS packages",
 			"groupSlug": "nestjs",
-			"automerge": true
+			"automerge": true,
+			"matchPackageNames": ["/^@nestjs//"]
 		},
 		{
 			"matchPackageNames": [
@@ -41,15 +41,13 @@
 			"automerge": true
 		},
 		{
-			"matchPackageNames": ["typescript"],
-			"matchPackagePatterns": ["^@types/", "^ts-"],
+			"matchPackageNames": ["typescript", "/^@types//", "/^ts-/"],
 			"groupName": "TypeScript and type definitions",
 			"groupSlug": "typescript",
 			"automerge": true
 		},
 		{
-			"matchPackagePatterns": ["^@swc/"],
-			"matchPackageNames": ["unplugin-swc"],
+			"matchPackageNames": ["unplugin-swc", "/^@swc//"],
 			"groupName": "SWC packages",
 			"groupSlug": "swc",
 			"automerge": true
