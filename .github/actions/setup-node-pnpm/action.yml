@@ -50,6 +50,5 @@ runs:
         cache: 'pnpm'
 
     - name: Install dependencies (if no cache hit)
-      if: ${{ inputs.install-dependencies == 'true'}}
       shell: bash
       run: pnpm install --frozen-lockfile

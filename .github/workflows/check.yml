@@ -20,19 +20,9 @@ jobs:
         uses: ./.github/actions/setup-node-pnpm
         with:
           install-dependencies: true
-  lint:
-    name: Lint
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - uses: ./.github/actions/setup-node-pnpm
-        with:
-          install-dependencies: false
-      - run: pnpm lint
 
-  format:
-    name: Format
+  quality:
+    name: Code Quality
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -112,7 +102,7 @@ jobs:
 
   summary:
     name: Workflow Summary
-    needs: [setup, lint, format, build, test, docker]
+    needs: [setup, quality, build, test, docker]
     runs-on: ubuntu-latest
     if: always() # Run even if previous jobs fail
     steps:
@@ -128,8 +118,7 @@ jobs:
           echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
           echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
           echo "| **Setup** | ${{ needs.setup.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Lint** | ${{ needs.lint.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Format** | ${{ needs.format.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Code Quality** | ${{ needs.quality.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
           echo "| **Build** | ${{ needs.build.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
           echo "| **Test** | ${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
           echo "| **Docker** | ${{ needs.docker.result == 'success' && '✅ Passed' || (needs.docker.result == 'skipped' && '⏩ Skipped' || '❌ Failed') }} |" >> $GITHUB_STEP_SUMMARY
