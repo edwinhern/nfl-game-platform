@@ -17,12 +17,6 @@ runs:
         echo "Using Node.js version: $NODE_VERSION"
         echo "version=$NODE_VERSION" >> $GITHUB_OUTPUT
 
-    - name: Setup Node.js
-      uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
-      with:
-        node-version: ${{ steps.node-version.outputs.version }}
-        cache: 'pnpm'
-
     - name: Extract pnpm version from .tool-versions
       id: pnpm-version
       shell: bash
@@ -36,7 +30,13 @@ runs:
       with:
         version: ${{ steps.pnpm-version.outputs.version }}
 
+    - name: Setup Node.js
+      uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
+      with:
+        node-version: ${{ steps.node-version.outputs.version }}
+        cache: 'pnpm'
+
     - name: Install dependencies (conditional)
-      if: ${{ inputs.install-dependencies == 'true' }} # Only install if input is true
+      if: ${{ inputs.install-dependencies == 'true' }}
       shell: bash
       run: pnpm install
