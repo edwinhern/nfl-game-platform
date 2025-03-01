@@ -44,11 +44,11 @@ runs:
         restore-keys: |
           ${{ runner.os }}-pnpm-
 
-    # - name: Setup Node.js
-    #   uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
-    #   with:
-    #     node-version: ${{ steps.node-version.outputs.version }}
-    #     cache: 'pnpm'
+    - name: Setup Node.js
+      uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
+      with:
+        node-version: ${{ steps.node-version.outputs.version }}
+        cache: 'pnpm'
 
     - name: Install dependencies (if no cache hit)
       if: ${{ inputs.install-dependencies == 'true' && steps.cache-modules.outputs.cache-hit != 'true' }}
