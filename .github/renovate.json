@@ -1,0 +1,70 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": [
+		"config:recommended",
+		"customManagers:biomeVersions",
+		"customManagers:dockerfileVersions",
+		"customManagers:githubActionsVersions",
+		":dependencyDashboard",
+		":semanticCommits",
+		":semanticPrefixFix",
+		":automergeMinor",
+		":automergePr",
+		":automergeRequireAllStatusChecks",
+		"helpers:pinGitHubActionDigests"
+	],
+	"timezone": "America/Chicago",
+	"labels": ["dependencies"],
+	"dependencyDashboard": true,
+	"packageRules": [
+		{
+			"matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+			"groupName": "all non-major dependencies",
+			"groupSlug": "all-minor-patch",
+			"automerge": true
+		},
+		{
+			"matchPackagePatterns": ["^@nestjs/"],
+			"groupName": "NestJS packages",
+			"groupSlug": "nestjs",
+			"automerge": true
+		},
+		{
+			"matchPackageNames": [
+				"vitest",
+				"@vitest/coverage-c8",
+				"supertest",
+				"@types/supertest"
+			],
+			"groupName": "Testing packages",
+			"groupSlug": "testing",
+			"automerge": true
+		},
+		{
+			"matchPackageNames": ["typescript"],
+			"matchPackagePatterns": ["^@types/", "^ts-"],
+			"groupName": "TypeScript and type definitions",
+			"groupSlug": "typescript",
+			"automerge": true
+		},
+		{
+			"matchPackagePatterns": ["^@swc/"],
+			"matchPackageNames": ["unplugin-swc"],
+			"groupName": "SWC packages",
+			"groupSlug": "swc",
+			"automerge": true
+		},
+		{
+			"matchPackageNames": ["rxjs", "reflect-metadata"],
+			"groupName": "Core runtime dependencies",
+			"groupSlug": "core-runtime",
+			"automerge": true
+		}
+	],
+	"prHourlyLimit": 4,
+	"prConcurrentLimit": 10,
+	"rangeStrategy": "pin",
+	"separateMajorMinor": true,
+	"separateMultipleMajor": true,
+	"commitMessagePrefix": "⬆️ "
+}
