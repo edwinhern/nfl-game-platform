@@ -42,6 +42,5 @@
 		"typescript": "^5.8.2",
 		"unplugin-swc": "^1.5.1",
 		"vitest": "^3.0.7"
-	},
-	"packageManager": "pnpm@10.5.2"
+	}
 }
