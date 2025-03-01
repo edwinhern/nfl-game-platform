@@ -5,31 +5,51 @@ updates:
     schedule:
       interval: monthly
       timezone: America/Chicago
+    package-manager: pnpm
     commit-message:
-      prefix: "⬆️ "
+      prefix: '⬆️ '
     groups:
+      # Patch updates across all dependencies
       patch:
         update-types:
           - patch
-      minor-development:
-        update-types:
-          - minor
-        dependency-type: development
-      minor-production:
-        update-types:
-          - minor
-        dependency-type: production
-      eslint:
+
+      # NestJS related packages
+      nestjs:
         patterns:
-          - "*eslint*"
-      prettier:
+          - '@nestjs/*'
+
+      # Testing related packages
+      testing:
         patterns:
-          - "*prettier*"
+          - 'vitest'
+          - '@vitest/*'
+          - 'supertest'
+          - '@types/supertest'
+
+      # TypeScript and types
       typescript:
         patterns:
-          - "*typescript*"
-          - tsx
-          - typedoc
+          - 'typescript'
+          - '@types/*'
+          - 'ts-*'
+
+      # SWC related packages
+      swc:
+        patterns:
+          - '@swc/*'
+          - 'unplugin-swc'
+
+      # Biome
+      biome:
+        patterns:
+          - '@biomejs/*'
+
+      # Core runtime dependencies
+      core:
+        patterns:
+          - 'rxjs'
+          - 'reflect-metadata'
 
   - package-ecosystem: github-actions
     directory: /
@@ -37,4 +57,4 @@ updates:
       interval: monthly
       timezone: America/Chicago
     commit-message:
-      prefix: "⬆️ "
+      prefix: '⬆️ '
