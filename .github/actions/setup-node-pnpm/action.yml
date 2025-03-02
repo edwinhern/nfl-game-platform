@@ -5,50 +5,40 @@ inputs:
     description: 'Install pnpm dependencies (true/false)'
     required: false
     default: 'true'
+  pnpm-version:
+    description: 'pnpm version override (default: read from .tool-versions)'
+    required: false
+    default: ''
 
 runs:
   using: composite
   steps:
-    - name: Extract Node.js version from .tool-versions
-      id: node-version
-      shell: bash
-      run: |
-        NODE_VERSION=$(grep 'nodejs' .tool-versions | awk '{print $2}')
-        echo "Using Node.js version: $NODE_VERSION"
-        echo "version=$NODE_VERSION" >> $GITHUB_OUTPUT
-
     - name: Extract pnpm version from .tool-versions
       id: pnpm-version
       shell: bash
       run: |
-        PNPM_VERSION=$(grep 'pnpm' .tool-versions | awk '{print $2}')
-        echo "Using pnpm version: $PNPM_VERSION"
-        echo "version=$PNPM_VERSION" >> $GITHUB_OUTPUT
+        if [[ -n "${{ inputs.pnpm-version }}" ]]; then
+          echo "Using pnpm version from input: ${{ inputs.pnpm-version }}"
+          echo "version=${{ inputs.pnpm-version }}" >> $GITHUB_OUTPUT
+        elif [[ -f .tool-versions ]]; then
+          PNPM_VERSION=$(grep 'pnpm' .tool-versions | awk '{print $2}' || echo "")
+          if [[ -n "$PNPM_VERSION" ]]; then
+            echo "Using pnpm version from .tool-versions: $PNPM_VERSION"
+            echo "version=$PNPM_VERSION" >> $GITHUB_OUTPUT
+          else
+            echo "pnpm version not found in .tool-versions, using latest"
+            echo "version=latest" >> $GITHUB_OUTPUT
+          fi
+        else
+          echo "No .tool-versions file found, using latest pnpm"
+          echo "version=latest" >> $GITHUB_OUTPUT
+        fi
 
     - name: Setup pnpm
       uses: pnpm/action-setup@v4
       with:
         version: ${{ steps.pnpm-version.outputs.version }}
 
-    - name: Get pnpm store directory
+    - name: Install dependencies
       shell: bash
-      run: |
-        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-    - name: Restore pnpm cache
-      uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4
-      with:
-        path: ${{ env.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-
-
-    - name: Setup Node.js
-      uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
-      with:
-        node-version: ${{ steps.node-version.outputs.version }}
-        cache: 'pnpm'
-
-    - name: Install dependencies (if no cache hit)
-      shell: bash
-      run: pnpm install --frozen-lockfile
+      run: pnpm install
