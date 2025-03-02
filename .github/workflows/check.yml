@@ -1,10 +1,8 @@
 name: CI
 
 on:
-  push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
+  - push
+  - pull_request
 
 permissions:
   contents: read
@@ -18,8 +16,6 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Setup Node.js and pnpm
         uses: ./.github/actions/setup-node-pnpm
-        with:
-          install-dependencies: true
 
   quality:
     name: Code Quality
@@ -38,8 +34,6 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - uses: ./.github/actions/setup-node-pnpm
-        with:
-          install-dependencies: false
       - run: pnpm build
 
   test:
@@ -49,8 +43,6 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - uses: ./.github/actions/setup-node-pnpm
-        with:
-          install-dependencies: false
       - run: pnpm test
 
   docker:
