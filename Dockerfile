@@ -33,5 +33,8 @@ COPY --from=build --chown=node:node /app/dist ./dist
 # Use the node user from the image
 USER node
 
+# Expose the port
+EXPOSE 8080
+
 # Start the server
 CMD ["node", "dist/main.js"]

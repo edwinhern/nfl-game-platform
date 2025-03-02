@@ -1,0 +1,83 @@
+services:
+  postgres:
+    container_name: nfl_postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: nfldb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nfl-network
+
+  flyway:
+    container_name: nfl_flyway
+    image: flyway/flyway:latest-alpine
+    command: -configFiles=/flyway/conf/flyway.conf clean migrate
+    environment:
+      FLYWAY_URL: jdbc:postgresql://postgres:5432/nfldb
+      FLYWAY_USER: postgres
+      FLYWAY_PASSWORD: postgres
+      FLYWAY_CONNECT_RETRIES: 60
+      FLYWAY_BASELINE_ON_MIGRATE: 'true'
+    volumes:
+      - ./database/migrations:/flyway/sql
+      - ./database/flyway.conf:/flyway/conf/flyway.conf
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - nfl-network
+
+  redis:
+    container_name: nfl_redis
+    image: redis:alpine
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nfl-network
+
+  api:
+    container_name: nfl_backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PORT: 8080
+      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/nfldb
+      NODE_ENV: production
+    ports:
+      - '8080:8080'
+    depends_on:
+      flyway:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    networks:
+      - nfl-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    name: nfl_postgres_data
+
+networks:
+  nfl-network:
+    name: nfl_network
