@@ -1,5 +1,5 @@
-name: 'Setup Node.js and pnpm'
-description: 'Sets up Node.js and pnpm with caching'
+name: 'Setup pnpm'
+description: 'Sets up pnpm with caching'
 
 runs:
   using: composite
@@ -32,4 +32,4 @@ runs:
 
     - name: Install dependencies
       shell: bash
-      run: pnpm install --frozen-lockfile
+      run: pnpm install
